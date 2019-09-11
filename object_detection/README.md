@@ -12,8 +12,63 @@ python convert_to_tfrecord.py
     --labels_dir=${the path where the xml files are}
 ```
 Now, we have train.record and test.record files.
+## Step 4: Create a label map
+Create a .pbtxt file to record all labels and the format is shown in below:
+```
+item {
+  id: 1
+  name: 'Australian_Redback_Spider'
+}
 
 
+item {
+  id: 2
+  name: 'Australian_Tarantula_Spider'
+}
+...
+```
+## Step 5: Train your data
+First, download a pretrained model from [this](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) website and decompress it.
 
+Then, in order to train data, we need to modify paths inside the pipeline.config file. The pipeline.config file is located in the previous downloaded folder. We need to modify:
+```
+num_classes: 11 #the number of labels in your dataset
+```
+```
+fine_tune_checkpoint: "/The path to the previous downloaded folder/model.ckpt"
+```
+```
+train_input_reader {
+  label_map_path: "/path to the label map/spiderlabelmap.pbtxt"
+  tf_record_input_reader {
+    input_path: "/path to the train.record/train.record"
+  }
+}
+```
+```
+eval_input_reader {
+  label_map_path: "/path to the label map/spiderlabelmap.pbtxt"
+  shuffle: false
+  num_readers: 1
+  tf_record_input_reader {
+    input_path: "/path to the test.record/test.record"
+  }
+}
+```
+Other things, e.g. learning rate, batch_size, num_steps, can be modified based on your own circumstance.
+
+Then, we can run train the data.
+```bash
+cd /path to the tensorflow folder/models/research
+python object_detection/legacy/train.py \
+    --pipeline_config_path=${path to pipeline.config} \
+    --train_dir=${path to store your training results} \
+    --logtostderr
+```
+It might take a long time. We can use tensorboard to visualize the training process by using the following command:
+```bash
+tensorboard --logdir=${path to your previous downloaded model}
+```
+			
 
 
