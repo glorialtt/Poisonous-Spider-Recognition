@@ -69,6 +69,23 @@ It might take a long time. We can use tensorboard to visualize the training proc
 ```bash
 tensorboard --logdir=${path to your previous downloaded model}
 ```
-			
-
-
+## Step 6: Convert your model to .pd format
+Run the following command to convert your model to .pd format so that we can evaluate it and use it to predict.
+```bash
+python object_detection/export_inference_graph.py 
+	--input_type image_tensor 
+    --pipeline_config_path ${path to pipeline.config}  
+    --trained_checkpoint_prefix ${path to checkpoint files, e.g. model.ckpt-11665}
+    --output_directory ${path to where you save your model}
+```
+## Step 7: Evaluate your model
+Simply, by running:
+```bash
+python object_detection/legacy/eval.py 
+	--pipeline_config_path ${path to pipeline.config}
+    --checkpoint_dir ${path to the folder that stores checkpoint files} 
+    --eval_dir ${path to store evaluation results}
+```
+## Step 8: Prediction
+Open object.ipynb file and change PATH_TO_FROZEN_GRAPH, PATH_TO_LABELS and PATH_TO_TEST_IMAGES_DIR. Then, you can visualize the results, e.g. 
+![Example Image](img/example_prediction.png "Example Image")
