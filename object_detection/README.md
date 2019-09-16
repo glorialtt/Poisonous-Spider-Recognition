@@ -40,7 +40,7 @@ xml_df = xml_to_csv(xml_path)
 xml_df.to_csv('/Users/mac/Desktop/testlabels.csv', index=None)
 print('Successfully converted xml to csv.')
 ```
-Run the above codes twice for the training and testing labels. Then, run twice generate_tfrecord.py file (once for the training set, once for the testing set), with the following command:
+Run the above codes twice for the training and testing labels. If you want to change something in the xml files, you can look at xml_modified.py. Then, run twice generate_tfrecord.py file (once for the training set, once for the testing set), with the following command:
 ```bash
 python generate_tfrecord.py 
   --csv_input=${your csv path}
@@ -61,7 +61,7 @@ First, download a pretrained model from [this](https://github.com/tensorflow/mod
 
 Then, in order to train data, we need to modify paths inside the pipeline.config file. The pipeline.config file is located in the previous downloaded folder. We need to modify:
 ```
-num_classes: 11 #the number of labels in your dataset
+num_classes: 1 #the number of labels in your dataset
 ```
 ```
 fine_tune_checkpoint: "/The path to the previous downloaded folder/model.ckpt"
